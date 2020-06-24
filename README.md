@@ -8,4 +8,4 @@ This plugin is provided "as is".
 
 ### Crédits
 
-Mention crédits : Plugin réalisé pour la plate-forme [EMAN](http://eman-archives.org) (Item, ENS-CNRS) par Vincent Buard ([Numerizen](http://numerizen.com)). 
+Mention crédits : Plugin réalisé pour la plate-forme [EMAN](http://eman-archives.org) (Item, ENS-CNRS) par Vincent Buard ([Numerizen](http://www.numerizen.com)). 
