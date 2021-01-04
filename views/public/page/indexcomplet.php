@@ -9,7 +9,7 @@
   -webkit-box-shadow: rgba(0, 0, 0, 0) 0 0 10px;
   -moz-box-shadow: rgba(0, 0, 0, 0) 0 0 10px;
   box-shadow: rgba(0, 0, 0, 0) 0 0 10px;
-  -webkit-box-sizing: border-box;  
+  -webkit-box-sizing: border-box;
   margin:0;
   padding:0 0 0 2em;
 }
@@ -26,7 +26,10 @@ span.montrer {
   font-size: 1.2em;
   float:right;
 }
-</style>  
+.edit-value {
+  cursor:pointer;
+}
+</style>
 
 <h3>Index des valeurs</h3> <br />
 
@@ -38,13 +41,14 @@ Métadonnées personnalisées ensemble.
 <br /><br />
   <?php
   echo $dropdown;
-  
+if ($id) {
   echo "<br /><a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alpha&vide=" . $vide . "'>Trier par ordre alphabétique</a><br />";
   echo "<a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alphainverse&vide=" . $vide . "'>Trier par ordre alphabétique inverse</a><br />";
-  echo "<br />$texte<br /><br />" ;  
+  echo "<br />$texte<br /><br />" ;
 ?>
 <span class="tout">Tout d&eacute;plier</span><br /><br />
-<?php  
+<?php
+}
   echo $content;
   ?>
   <script>
@@ -63,5 +67,5 @@ Métadonnées personnalisées ensemble.
   });
 
   </script>
-  
+
   <?php echo foot();
