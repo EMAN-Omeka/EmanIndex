@@ -34,7 +34,7 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
         $query = "SELECT DISTINCT(text), record_id id FROM `$db->ElementTexts` text LEFT JOIN `$db->Items` item ON item.id = text.record_id WHERE record_type = 'Item' AND element_id = $id $private";
       }
       if (current_user()) {
-        $this->view->dropdown .= '<span style="padding-left:20px;"><input ' . $check . ' type="checkbox" name="vides" id="vides" /><label for="vides">Afficher les champs vides</label></span>';
+        $this->view->dropdown .= '<span style="padding-left:20px;"><input ' . $check . ' type="checkbox" name="vides" id="vides" /><label style="padding-left:5px;" for="vides">Afficher les champs vides</label></span>';
       }
       $resultats = [];
    		$items = $db->query($query)->fetchAll();

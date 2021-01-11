@@ -19,9 +19,13 @@ jQuery(document).ready(function() {
   $('.tout').click(function() {
     $('ol.notices').toggle();
     if ($(this).html() == 'Tout replier') {
+      $(this).css('background', '#A4C637');
+      $(this).css('border-color', '#749308');
       $(this).html('Tout d&eacute;plier');
       $('.montrer').html(' + ');
     } else {
+      $(this).css('background', '#ad6345');
+      $(this).css('border-color', '#7E432C');
       $(this).html('Tout replier');
       $('.montrer').html(' - ');
     }
