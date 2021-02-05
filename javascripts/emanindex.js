@@ -8,8 +8,8 @@ jQuery(document).ready(function() {
 		});
 	});
   $('.montrer').click(function() {
-    $(this).next('ol.notices').toggle();
-    $(this).next().next('ol.notices').toggle();
+    $(this).next('ol.records').toggle();
+    $(this).next().next('ol.records').toggle();
     if ($(this).text() == ' + ') {
       $(this).text(' - ');
     } else {
@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
     }
   });
   $('.tout').click(function() {
-    $('ol.notices').toggle();
+    $('ol.records').toggle();
     if ($(this).html() == 'Tout replier') {
       $(this).css('background', '#A4C637');
       $(this).css('border-color', '#749308');
@@ -41,8 +41,10 @@ jQuery(document).ready(function() {
     }
   });
   $('#wrap').on('click', '.enregistrer', function(e) {
+    recordType = $(this).parent().parent().parent().attr('type');
+    console.log('type : ' + recordType);
     anchorId = $(this).parent().parent().parent().attr('id');
-    itemId = $(this).parent().attr('id');
+    recordId = $(this).parent().attr('id');
     elementId = $( "#fieldName" ).val();
     valeur = $(this).parent().find('.value').val();
     orig = exactHTML($(this).parent().parent().parent().find('span.html-value'));
@@ -51,9 +53,9 @@ jQuery(document).ready(function() {
       type: 'POST',
       dataType: 'json',
       url: path.substr(0, path.lastIndexOf("/")) + '/emanindexupdate',
-      data: { itemId: itemId, elementId: elementId, valeur: valeur, orig: orig },
+      data: { recordId: recordId, elementId: elementId, valeur: valeur, orig: orig, recordType: recordType },
       success: function(json) {
-        document.location = window.location.origin + window.location.pathname  + window.location.search + '#item-' + anchorId;
+        document.location = window.location.origin + window.location.pathname  + window.location.search + '#' + recordType + '-' + anchorId;
         document.location.reload(true);
       }
     });

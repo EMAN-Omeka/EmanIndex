@@ -47,11 +47,22 @@ class EmanIndexPlugin extends Omeka_Plugin_AbstractPlugin
    		$router->addRoute(
   				'ei_eman_index_fields_list',
   				new Zend_Controller_Router_Route(
-  						'fieldslist',
+  						'emanindex/fieldslist',
   						array(
   								'module' => 'eman-index',
   								'controller'   => 'page',
   								'action'       => 'fields-list',
+  						)
+  				)
+  		);
+   		$router->addRoute(
+  				'ei_eman_index_preferences',
+  				new Zend_Controller_Router_Route(
+  						'emanindex/preferences',
+  						array(
+  								'module' => 'eman-index',
+  								'controller'   => 'page',
+  								'action'       => 'preferences',
   						)
   				)
   		);
@@ -79,7 +90,7 @@ class EmanIndexPlugin extends Omeka_Plugin_AbstractPlugin
   {
     $nav[] = array(
                     'label' => __('Eman Index'),
-                    'uri' => url('fieldslist'),
+                    'uri' => url('emanindex/fieldslist'),
                   );
     return $nav;
   }

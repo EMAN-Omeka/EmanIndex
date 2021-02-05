@@ -45,12 +45,14 @@ h3 {
 p {
   margin: 0 0 10px 0;
 }
+input.type, label {
+  cursor:pointer;
+}
 </style>
 
 <h3>Index des valeurs</h3>
 <p>En sélectionnant un champ, vous avez accès à la liste complète des valeurs
-utilisées pour ce champ. La fonction ne fonctionne que pour les notices et non pour
-les collections ou les images. Les résultats sont présentés par ordre
+utilisées pour ce champ. Les résultats sont présentés par ordre
 alphabétique. La liste déroulante présente les champs Dublin Core et
 Métadonnées personnalisées ensemble.</p>
 <?php if (current_user()) : ?>
@@ -60,8 +62,8 @@ Métadonnées personnalisées ensemble.</p>
   <?php
   echo $dropdown;
 if ($id) {
-  echo "<br /><a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alpha&vide=" . $vide . "'>Trier par ordre alphabétique</a><br />";
-  echo "<a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alphainverse&vide=" . $vide . "'>Trier par ordre alphabétique inverse</a><br />";
+  echo "<br /><a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alpha&type=" . $type . "&vide=" . $vide . "'>Trier par ordre alphabétique</a><br />";
+  echo "<a href='" . WEB_ROOT . "/emanindexpage?q=" . $id . "&order=alphainverse&type=" . $type . "&vide=" . $vide . "'>Trier par ordre alphabétique inverse</a><br />";
   echo "<h4>$texte</h4>" ;
 ?>
 <span class="tout">Tout d&eacute;plier</span><br /><br />
@@ -75,12 +77,16 @@ if ($id) {
     $('#vides').change(function() {
       $('#fieldName').change();
     });
+    $('.type').change(function() {
+      $('#fieldName').change();
+    });
     $('#fieldName').change(function () {
       var vide = 0;
       if ($('#vides').attr('checked') == 'checked') {
         vide = 1;
       }
-      window.location = '<?php echo WEB_ROOT ?>/emanindexpage?q=' + $(this).val() + "&vide=" + vide;
+      type = $('.type:checked').attr('value');
+      window.location = '<?php echo WEB_ROOT ?>/emanindexpage?q=' + $(this).val() + "&vide=" + vide + "&type=" + type;
     });
   });
 
