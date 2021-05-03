@@ -48,6 +48,9 @@ jQuery(document).ready(function() {
     elementId = $( "#fieldName" ).val();
     valeur = $(this).parent().find('.value').val();
     orig = exactHTML($(this).parent().parent().parent().find('span.html-value'));
+    if (orig == 'Non renseigné') {
+      orig = '';
+    }
     path = window.location.pathname;
     $.ajax({
       type: 'POST',

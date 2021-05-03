@@ -6,7 +6,7 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
   		$title = strtoupper($this->getParam('q'));
   		$fieldid = $this->getParam('fieldid');
   		$db = get_db();
-  		$items = $db->query("SELECT DISTINCT(text) FROM `$db->ElementTexts' WHERE element_id = $fieldid AND record_type = '$type' AND UPPER(text) LIKE '%$title%' ORDER BY text ASC")->fetchAll();
+  		$items = $db->query("SELECT DISTINCT(text) FROM `$db->ElementTexts` WHERE element_id = $fieldid AND record_type = '$type' AND UPPER(text) LIKE '%$title%' ORDER BY text ASC")->fetchAll();
   		$this->_helper->json($items);
   	}
 
@@ -41,14 +41,14 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
         $fichiers .= '<span style="margin-right:1em;"><input type="radio" id="File" class="type" name="type" value="File" ' . $checked . '><label for="File">Fichiers</label></span>';
       }
       $this->view->dropdown .= $collections . $items . $fichiers . '<br />' . $this->fieldsDropdown();
+  		$private = "";
+      if (! current_user() && $type <> 'File') {
+        $private = "AND main.public = 1";
+      }
   		if ($vide == 1 && $id <> 0) {
     		$check = 'checked';
-        $query = "SELECT DISTINCT(text), record_id id FROM `$db->ElementTexts` WHERE record_type = '$type' AND element_id = 50 AND record_id NOT IN (SELECT main.id FROM `$db->ElementTexts` e LEFT JOIN $mainType main ON e.record_id = main.id WHERE record_type = '$type' AND element_id = $id)";
+        $query = "SELECT 'Non renseigné' text, id FROM $mainType WHERE id NOT IN (SELECT main.id FROM `$db->ElementTexts` e LEFT JOIN $mainType main ON e.record_id = main.id WHERE record_type = '$type' AND element_id = $id) $private";
       } else {
-    		$private = "";
-        if (! current_user() && $type <> 'File') {
-          $private = "AND main.public = 1";
-        }
         $check = "";
         $query = "SELECT DISTINCT(text), record_id id FROM `$db->ElementTexts` text LEFT JOIN $mainType main ON main.id = text.record_id WHERE record_type = '$type' AND element_id = $id $private";
       }
@@ -64,6 +64,7 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
         $theRecord = get_record_by_id($type, $record['id']);
         if ($theRecord) {
           $title = strip_tags(metadata($theRecord, array('Dublin Core', 'Title')));
+          $title ? null : $title = $type . ' ' . $record['id'];
         }
         if (isset($valeurs[$record['text']])) {
           $valeurs[$record['text']][$record['id']] = $title;
@@ -84,7 +85,7 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
         $type == 'File' ? $a = 'Aucun' : $a = 'Aucune';
         $text = "$a $currentType n'a de valeur pour ce champ.";
       } elseif (empty($records) && $vide == 1 && $id <> 0) {
-        $type == 'File' ? $t = 'Tous' : $t = 'Toutes';
+        $type == 'Collection' ? $t = 'Toutes' : $t = 'Tous';
         $text = "$t les $currentType" . "s ont une valeur pour ce champ.";
       } elseif ($vide == 1 && $id <> 0) {
         $text = $count . " $currentType$e n'$v pas de valeur pour ce champ.";
@@ -117,11 +118,13 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
         		$e = 's';
         		$v = 'ont';
       		}
+      		$type == 'Collection' ? $ce = 'cette' : $ce = 'cet';
+      		$type == 'File' ? $ce = 'ce' : null;
       		$content .= "<ol class='records' style='display:none;'>" . $count . " " . strtolower($currentType) . "$e $v cette  valeur pour le champ <em>" . __($fieldName->name) . '</em> : ';
           foreach ($res as $recordId => $title) {
             $modif = '';
             if (current_user()) {
-              $modif = " - <span class='edit-value'>Modifier la valeur du champ pour cette $type</span>";
+              $modif = " - <span class='edit-value'>Modifier la valeur du champ pour $ce " . strtolower($currentType) . ".</span>";
             }
             $content .= "<li class='valeur' id='" . $recordId . "'><a href='" . WEB_ROOT . "/". strtolower($type) . "s/show/" . $recordId ."' target='_blank'>" . strip_tags($title) . "</a>$modif</li>";
           }
@@ -197,13 +200,13 @@ class EmanIndex_PageController extends Omeka_Controller_AbstractActionController
   		$form->setName('preferences');
 
     	$file = new Zend_Form_Element_Checkbox('fichier');
-    	$file->setLabel('Monter les informations concernant les fichiers :');
+    	$file->setLabel('Montrer les informations concernant les fichiers :');
     	$file->setAttrib('title', 'File');
     	isset($values['fichier']) ? $file->setValue($values['fichier']) : $file->setValue(0);
     	$form->addElement($file);
 
     	$collection = new Zend_Form_Element_Checkbox('collection');
-    	$collection->setLabel('Monter les informations concernant les collections :');
+    	$collection->setLabel('Montrer les informations concernant les collections :');
     	$collection->setAttrib('title', 'Collection');
     	isset($values['collection']) ? $collection->setValue($values['collection']) : $collection->setValue(0);
     	$form->addElement($collection);
